@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: swiggy-app-ing
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: "swiggyclone.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: swiggy-app-svc
+            port:
+              number: 80
