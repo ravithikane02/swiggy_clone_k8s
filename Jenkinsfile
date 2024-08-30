@@ -62,7 +62,7 @@ pipeline {
                         echo 'Push to DockerHub'
                         sh 'docker tag swiggy-clone:latest ravithikane02/swiggy-clone:latest'
                         sh 'docker push ravithikane02/swiggy-clone:latest'
-                    }
+                    
                 }
                 
             }
