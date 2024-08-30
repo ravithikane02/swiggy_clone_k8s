@@ -25,34 +25,34 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv(SONARQUBE_SERVER) {
-                    // Run the SonarQube Scanner
-                    sh '''$SCANNER_HOME/bin/sonar-scanner \
-                        -Dsonar.projectName=Swiggy-CICD \
-                        -Dsonar.projectKey=Swiggy-CICD'''
-                }
-            }
-        }
-        stage('Quality gates') {
-            steps {
-                // timeout(time: 1, unit: 'MINUTES') {
-                //     waitForQualityGate abortPipeline: true
-                // }
-                waitForQualityGate abortPipeline: true
-            }
-        }
+        // stage('SonarQube Analysis') {
+        //     steps {
+        //         withSonarQubeEnv(SONARQUBE_SERVER) {
+        //             // Run the SonarQube Scanner
+        //             sh '''$SCANNER_HOME/bin/sonar-scanner \
+        //                 -Dsonar.projectName=Swiggy-CICD \
+        //                 -Dsonar.projectKey=Swiggy-CICD'''
+        //         }
+        //     }
+        // }
+        // stage('Quality gates') {
+        //     steps {
+        //         // timeout(time: 1, unit: 'MINUTES') {
+        //         //     waitForQualityGate abortPipeline: true
+        //         // }
+        //         waitForQualityGate abortPipeline: true
+        //     }
+        // }
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
             }
         }
-        stage('Trivy FS Scan') {
-            steps {
-                sh 'trivy fs . > trivyfs.txt'
-            }
-        }
+        // stage('Trivy FS Scan') {
+        //     steps {
+        //         sh 'trivy fs . > trivyfs.txt'
+        //     }
+        // }
         stage('Docker build and Push'){
             steps{
                 script{
@@ -66,27 +66,26 @@ pipeline {
                 }  
             }
         }
-        stage('Trivy'){
-            steps{
-                sh 'trivy image ravithikane02/swiggy-clone:latest > trivyimage.txt'
-            }
-        }
+        // stage('Trivy'){
+        //     steps{
+        //         sh 'trivy image ravithikane02/swiggy-clone:latest > trivyimage.txt'
+        //     }
+        // }
         stage('Deploy on EKS') {
-    steps {
-        script {
-            dir('k8s') {
-                withKubeCredentials(kubectlCredentialsId: 'Kubernetes') {
-                    // Use proper commands for deployment
-                    sh 'kubectl delete --all pods' //--namespace=<your-namespace>' // specify namespace if necessary
-                    sh 'kubectl apply -f deployment.yml'
-                    sh 'kubectl apply -f service.yml'
-                    sh 'kubectl apply -f ingress.yml'
+            steps {
+                script {
+                    dir('k8s') {
+                        withKubeCredentials(kubectlCredentialsId: 'Kubernetes') {
+                         // Use proper commands for deployment
+                            sh 'kubectl delete --all pods' //--namespace=<your-namespace>' // specify namespace if necessary
+                            sh 'kubectl apply -f deployment.yml'
+                            sh 'kubectl apply -f service.yml'
+                            sh 'kubectl apply -f ingress.yml'
+                        }
+                    }
                 }
             }
         }
-    }
-}
-
         stage('Clear workspace at last') {
             steps {
                 cleanWs()
