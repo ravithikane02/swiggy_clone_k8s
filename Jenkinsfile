@@ -62,9 +62,8 @@ pipeline {
                         echo 'Push to DockerHub'
                         sh 'docker tag swiggy-clone:latest ravithikane02/swiggy-clone:latest'
                         sh 'docker push ravithikane02/swiggy-clone:latest'
-                    
-                }
-                
+                    }
+                }  
             }
         }
         stage('Trivy'){
@@ -81,11 +80,10 @@ pipeline {
                                 sh 'kubectl delete --all pods'
                                 sh 'kubectl apply -f deployment.yml'
                                 sh 'kubectl apply -f service.yml'
-                                sh 'kubectl apply -f ingress.yml'
-                            }  
+                                sh 'kubectl apply -f ingress.yml'  
                         }
                     }
-                }    
+                }       
             }  
         }
         stage('Clear workspace at last') {
