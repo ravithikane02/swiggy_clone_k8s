@@ -75,7 +75,7 @@ pipeline {
             steps {
                 script {
                     dir('k8s') {
-                        withKubeCredentials(kubectlCredentialsId: 'Kubernetes') {
+                         withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'Kubernetes', namespace: '', serverUrl: '']]) {
                          // Use proper commands for deployment
                             sh 'kubectl delete --all pods' //--namespace=<your-namespace>' // specify namespace if necessary
                             sh 'kubectl apply -f deployment.yml'
