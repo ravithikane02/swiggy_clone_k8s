@@ -71,21 +71,22 @@ pipeline {
                 sh 'trivy image ravithikane02/swiggy-clone:latest > trivyimage.txt'
             }
         }
-        stage('Deploy on EKS'){
-            steps{
-                script{
-                    dir('k8s'){
-                            withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'Kubernetes', namespace: '', serverUrl: '']]){
-                                
-                                sh 'kubectl delete --all pods'
-                                sh 'kubectl apply -f deployment.yml'
-                                sh 'kubectl apply -f service.yml'
-                                sh 'kubectl apply -f ingress.yml'  
-                        }
-                    }
-                }       
-            }  
+        stage('Deploy on EKS') {
+    steps {
+        script {
+            dir('k8s') {
+                withKubeCredentials(kubectlCredentialsId: 'Kubernetes') {
+                    // Use proper commands for deployment
+                    sh 'kubectl delete --all pods' //--namespace=<your-namespace>' // specify namespace if necessary
+                    sh 'kubectl apply -f deployment.yml'
+                    sh 'kubectl apply -f service.yml'
+                    sh 'kubectl apply -f ingress.yml'
+                }
+            }
         }
+    }
+}
+
         stage('Clear workspace at last') {
             steps {
                 cleanWs()
