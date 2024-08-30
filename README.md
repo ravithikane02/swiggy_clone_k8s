@@ -7,7 +7,7 @@ Containerising - Dockerfile
 Kubernetes - Deploymant, Service, Ingress
 CI - Git Action
 CD - Gitops (ArgoCD)
-Helm - dev,QA,Prod
+Helm - dev,QA,Prod.
 
 
 
